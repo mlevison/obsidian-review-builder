@@ -1,7 +1,7 @@
 {
 	"id": "obsidian-review-builder",
 	"name": "Obsidian Review Builder",
-	"version": "0.1.2",
+	"version": "0.1.3",
 	"minAppVersion": "0.15.0",
 	"description": "Simplify quarterly and weekly reviews by combing many Daily and Weekly notes.",
 	"author": "Mark Levison",
