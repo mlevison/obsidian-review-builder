@@ -11,6 +11,9 @@ Now each quarter, I have two files to look at: quarterly_days.md and quarterly_w
 
 ## Settings
 - **Temp Folder**: Select which folder to use for temporary files.
+- **Empty Section Handling**: Choose whether to remove or keep empty sections (headings with no content) from weekly and quarterly review notes. Options:
+  - **Remove empty sections** (default): Automatically removes headings with no content, cleaning up daily notes that often have blank section templates like "### Work Tasks" or "### Notes" that were never filled in.
+  - **Keep empty sections**: Preserves all headings, even if they have no content.
 
 ## Installation
 

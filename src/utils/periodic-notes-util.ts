@@ -7,6 +7,8 @@ import {
 	getDailyNoteSettings,
 	getWeeklyNoteSettings,
 } from "obsidian-daily-notes-interface";
+import { removeEmptySections } from "./markdown-utils";
+import { EmptySectionBehavior, EmptySectionBehaviorType } from "../settings";
 
 export interface NotesInfo {
 	dailyNotes: TFile[];
@@ -229,11 +231,22 @@ export class PeriodicNotesUtil {
 	/**
 	 * Get summary of notes for display
 	 */
-	getNotesContent(notes: TFile[]): Promise<string[]> {
+	getNotesContent(
+		notes: TFile[],
+		shouldRemoveEmptySections: EmptySectionBehaviorType = EmptySectionBehavior.DONOT_REMOVE_EMPTY_SECTIONS,
+	): Promise<string[]> {
 		return Promise.all(
 			notes.map(async (file) => {
 				try {
-					const content = await this.app.vault.read(file);
+					let content = await this.app.vault.read(file);
+
+					if (
+						shouldRemoveEmptySections ===
+						EmptySectionBehavior.REMOVE_EMPTY_SECTIONS
+					) {
+						content = removeEmptySections(content);
+					}
+
 					return `## ${file.basename}\n${content}\n\n`;
 				} catch (error) {
 					console.error(`Error reading file ${file.path}:`, error);
@@ -249,18 +262,25 @@ export class PeriodicNotesUtil {
 	async createNotesSummary(
 		dailyNotes: TFile[],
 		weeklyNotes: TFile[],
+		shouldRemoveEmptySections: EmptySectionBehaviorType = EmptySectionBehavior.DONOT_REMOVE_EMPTY_SECTIONS,
 	): Promise<string> {
 		let summary = "";
 
 		if (dailyNotes.length > 0) {
 			summary += "# Daily Notes Summary\n\n";
-			const dailyContent = await this.getNotesContent(dailyNotes);
+			const dailyContent = await this.getNotesContent(
+				dailyNotes,
+				shouldRemoveEmptySections,
+			);
 			summary += dailyContent.join("");
 		}
 
 		if (weeklyNotes.length > 0) {
 			summary += "# Weekly Notes Summary\n\n";
-			const weeklyContent = await this.getNotesContent(weeklyNotes);
+			const weeklyContent = await this.getNotesContent(
+				weeklyNotes,
+				shouldRemoveEmptySections,
+			);
 			summary += weeklyContent.join("");
 		}
 
@@ -280,6 +300,7 @@ export class PeriodicNotesUtil {
 		weeklyNotes: TFile[],
 		tempFolderPath: string,
 		quarterInfo?: { label: string; quarter: number; year: number },
+		shouldRemoveEmptySections: EmptySectionBehaviorType = EmptySectionBehavior.DONOT_REMOVE_EMPTY_SECTIONS,
 	): Promise<{
 		dailyFilePath: string | null;
 		weeklyFilePath: string | null;
@@ -295,7 +316,10 @@ export class PeriodicNotesUtil {
 
 		// Write daily notes to quarter-specific file
 		if (dailyNotes.length > 0) {
-			const dailyContent = await this.getNotesContent(dailyNotes);
+			const dailyContent = await this.getNotesContent(
+				dailyNotes,
+				shouldRemoveEmptySections,
+			);
 			const quarterLabel = quarterInfo
 				? `_${quarterInfo.label.replace(/\s/g, "_")}`
 				: "";
@@ -316,7 +340,10 @@ export class PeriodicNotesUtil {
 
 		// Write weekly notes to quarter-specific file
 		if (weeklyNotes.length > 0) {
-			const weeklyContent = await this.getNotesContent(weeklyNotes);
+			const weeklyContent = await this.getNotesContent(
+				weeklyNotes,
+				shouldRemoveEmptySections,
+			);
 			const quarterLabel = quarterInfo
 				? `_${quarterInfo.label.replace(/\s/g, "_")}`
 				: "";

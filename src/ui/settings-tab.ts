@@ -1,5 +1,9 @@
 import { App, Plugin, PluginSettingTab, Setting } from "obsidian";
-import { QuarterlyReviewSettings, DEFAULT_SETTINGS } from "../settings";
+import {
+	QuarterlyReviewSettings,
+	DEFAULT_SETTINGS,
+	EmptySectionBehavior,
+} from "../settings";
 
 export interface SettingsPlugin extends Plugin {
 	settings: QuarterlyReviewSettings;
@@ -34,6 +38,30 @@ export class QuarterlyReviewSettingTab extends PluginSettingTab {
 					.setValue(this.plugin.settings.tempFolderPath)
 					.onChange(async (value) => {
 						this.plugin.settings.tempFolderPath = value || "temp";
+						await this.plugin.saveSettings();
+					}),
+			);
+
+		new Setting(containerEl)
+			.setName("Empty Section Handling")
+			.setDesc(
+				"Choose whether to remove empty sections (headings with no content) from weekly and quarterly review notes",
+			)
+			.addDropdown((dropdown) =>
+				dropdown
+					.addOption(
+						EmptySectionBehavior.REMOVE_EMPTY_SECTIONS,
+						"Remove empty sections",
+					)
+					.addOption(
+						EmptySectionBehavior.DONOT_REMOVE_EMPTY_SECTIONS,
+						"Keep empty sections",
+					)
+					.setValue(this.plugin.settings.removeEmptySections)
+					.onChange(async (value) => {
+						this.plugin.settings.removeEmptySections = value as
+							| typeof EmptySectionBehavior.REMOVE_EMPTY_SECTIONS
+							| typeof EmptySectionBehavior.DONOT_REMOVE_EMPTY_SECTIONS;
 						await this.plugin.saveSettings();
 					}),
 			);

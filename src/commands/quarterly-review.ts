@@ -98,6 +98,7 @@ async function createQuarterlyReview(
 			notesInfo.weeklyNotes,
 			tempFolderPath,
 			selectedQuarter,
+			plugin.settings.removeEmptySections,
 		);
 
 		// Open the newly created file

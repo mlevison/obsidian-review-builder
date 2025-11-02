@@ -127,7 +127,7 @@ async function writeWeeklyReviewTempFile(
 	tempFolderPath: string,
 	weekInfo: WeekInfo,
 	periodicNotesUtil: PeriodicNotesUtil,
-	plugin: Plugin,
+	plugin: Plugin & { settings: QuarterlyReviewSettings },
 ): Promise<string | null> {
 	if (dailyNotes.length === 0) {
 		return null;
@@ -146,7 +146,10 @@ async function writeWeeklyReviewTempFile(
 	const filePath = `${tempFolderPath}/${fileName}`;
 
 	// Get daily notes content
-	const dailyContent = await periodicNotesUtil.getNotesContent(dailyNotes);
+	const dailyContent = await periodicNotesUtil.getNotesContent(
+		dailyNotes,
+		plugin.settings.removeEmptySections,
+	);
 	const fileContent = `# Weekly Review - ${weekInfo.label}\n\n${dailyContent.join("")}`;
 
 	// Check if file exists and delete it first (since we want to overwrite)
