@@ -1,31 +1,3 @@
-/**
- * Removes empty sections from markdown content.
- * An empty section is defined as a heading followed by either:
- * - Another heading of equal or higher level (fewer #)
- * - End of document
- * - Only whitespace before the next heading
- *
- * @param content - The markdown content to process
- * @returns The content with empty sections removed
- *
- * @example
- * ```typescript
- * const input = `# Title
- * ## Section 1
- * Some content
- * ## Section 2
- * ## Section 3
- * More content`;
- *
- * const output = removeEmptySections(input);
- * // Result:
- * // # Title
- * // ## Section 1
- * // Some content
- * // ## Section 3
- * // More content
- * ```
- */
 export const removeEmptySections = (content: string): string => {
 	if (!content.trim()) {
 		return "";
