@@ -65,5 +65,36 @@ export class QuarterlyReviewSettingTab extends PluginSettingTab {
 						await this.plugin.saveSettings();
 					}),
 			);
+
+		// #{#tlf1a-6}: Configuration for template line filtering
+		containerEl.createEl("h3", { text: "Template Line Filtering" });
+
+		new Setting(containerEl)
+			.setName("Filter Daily Note Template Lines")
+			.setDesc(
+				"Remove unchanged template lines from daily notes when compiling reviews. This helps highlight actual content you've written.",
+			)
+			.addToggle((toggle) =>
+				toggle
+					.setValue(this.plugin.settings.filterDailyTemplateLines)
+					.onChange(async (value) => {
+						this.plugin.settings.filterDailyTemplateLines = value;
+						await this.plugin.saveSettings();
+					}),
+			);
+
+		new Setting(containerEl)
+			.setName("Filter Weekly Note Template Lines")
+			.setDesc(
+				"Remove unchanged template lines from weekly notes when compiling reviews. This helps highlight actual content you've written.",
+			)
+			.addToggle((toggle) =>
+				toggle
+					.setValue(this.plugin.settings.filterWeeklyTemplateLines)
+					.onChange(async (value) => {
+						this.plugin.settings.filterWeeklyTemplateLines = value;
+						await this.plugin.saveSettings();
+					}),
+			);
 	}
 }

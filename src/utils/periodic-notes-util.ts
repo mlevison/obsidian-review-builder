@@ -8,6 +8,7 @@ import {
 	getWeeklyNoteSettings,
 } from "obsidian-daily-notes-interface";
 import { removeEmptySections } from "./markdown-utils";
+import { filterTemplateLines } from "./template-filter";
 import { EmptySectionBehavior, EmptySectionBehaviorType } from "../settings";
 
 export interface NotesInfo {
@@ -230,21 +231,29 @@ export class PeriodicNotesUtil {
 
 	/**
 	 * Get summary of notes for display
+	 * #{#tlf1a-3}: Processing order - template filtering after removeEmptySections
 	 */
 	getNotesContent(
 		notes: TFile[],
 		shouldRemoveEmptySections: EmptySectionBehaviorType = EmptySectionBehavior.DONOT_REMOVE_EMPTY_SECTIONS,
+		templateLines?: string[] | null,
 	): Promise<string[]> {
 		return Promise.all(
 			notes.map(async (file) => {
 				try {
 					let content = await this.app.vault.read(file);
 
+					// #{#tlf1a-3}: Step 1 - Remove empty sections if enabled
 					if (
 						shouldRemoveEmptySections ===
 						EmptySectionBehavior.REMOVE_EMPTY_SECTIONS
 					) {
 						content = removeEmptySections(content);
+					}
+
+					// #{#tlf1a-3}: Step 2 - Filter template lines if provided
+					if (templateLines && templateLines.length > 0) {
+						content = filterTemplateLines(content, templateLines);
 					}
 
 					return `## ${file.basename}\n${content}\n\n`;

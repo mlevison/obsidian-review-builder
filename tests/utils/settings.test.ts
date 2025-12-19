@@ -83,6 +83,14 @@ describe("Settings", () => {
 			);
 		});
 
+		it("should have filterDailyTemplateLines enabled by default", () => {
+			expect(DEFAULT_SETTINGS.filterDailyTemplateLines).toBe(true);
+		});
+
+		it("should have filterWeeklyTemplateLines enabled by default", () => {
+			expect(DEFAULT_SETTINGS.filterWeeklyTemplateLines).toBe(true);
+		});
+
 		it("should have valid EmptySectionBehaviorType value", () => {
 			const validValues = [
 				EmptySectionBehavior.REMOVE_EMPTY_SECTIONS,
@@ -98,6 +106,8 @@ describe("Settings", () => {
 			const settings: QuarterlyReviewSettings = {
 				tempFolderPath: "my-temp",
 				removeEmptySections: EmptySectionBehavior.REMOVE_EMPTY_SECTIONS,
+				filterDailyTemplateLines: true,
+				filterWeeklyTemplateLines: true,
 			};
 
 			expect(settings.tempFolderPath).toBe("my-temp");
@@ -109,6 +119,8 @@ describe("Settings", () => {
 				tempFolderPath: "another-temp",
 				removeEmptySections:
 					EmptySectionBehavior.DONOT_REMOVE_EMPTY_SECTIONS,
+				filterDailyTemplateLines: false,
+				filterWeeklyTemplateLines: false,
 			};
 
 			expect(settings.tempFolderPath).toBe("another-temp");
