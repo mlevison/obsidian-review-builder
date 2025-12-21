@@ -68,9 +68,8 @@ export async function buildWeeklyReview(
 		);
 		modal.open();
 	} catch (error) {
-		console.error("Error building weekly review:", error);
 		new Notice(
-			"Failed to create weekly review. Check console for details.",
+			"Failed to create weekly review.",
 		);
 	}
 }
@@ -119,9 +118,8 @@ async function createWeeklyReview(
 			new Notice(`No daily notes found for ${selectedWeek.label}.`);
 		}
 	} catch (error) {
-		console.error("Error creating weekly review:", error);
 		new Notice(
-			"Failed to create weekly review. Check console for details.",
+			"Failed to create weekly review.",
 		);
 	}
 }
@@ -165,9 +163,8 @@ async function writeWeeklyReviewTempFile(
 				dailyTemplateLines = templateContent.split("\n");
 			}
 		} catch (error) {
-			console.warn(
-				`Could not retrieve template content from "${dailySettings.template}":`,
-				error,
+			new Notice(
+				`Could not retrieve template content from "${dailySettings.template}": ${error}`,
 			);
 		}
 	}

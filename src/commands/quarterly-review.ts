@@ -63,10 +63,7 @@ export async function buildQuarterlyReview(
 		);
 		modal.open();
 	} catch (error) {
-		console.error("Error building quarterly review:", error);
-		new Notice(
-			"Failed to create quarterly review. Check console for details.",
-		);
+		new Notice("Failed to create quarterly review.");
 	}
 }
 
@@ -133,9 +130,6 @@ async function createQuarterlyReview(
 			);
 		}
 	} catch (error) {
-		console.error("Error creating quarterly review:", error);
-		new Notice(
-			"Failed to create quarterly review. Check console for details.",
-		);
+		new Notice("Failed to create quarterly review.");
 	}
 }

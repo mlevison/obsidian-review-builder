@@ -54,7 +54,6 @@ export class PeriodicNotesUtil {
 			const weeklySettings = getWeeklyNoteSettings();
 			return !!(dailySettings || weeklySettings);
 		} catch (error) {
-			console.error("Error checking periodic notes availability:", error);
 			return false;
 		}
 	}
@@ -110,7 +109,6 @@ export class PeriodicNotesUtil {
 				weeklyFormat,
 			};
 		} catch (error) {
-			console.error("Error getting notes info:", error);
 			new Notice(
 				"Error accessing daily/weekly notes. Please check your settings.",
 			);
@@ -257,7 +255,7 @@ export class PeriodicNotesUtil {
 			}
 			return templateContent.split("\n");
 		} catch (error) {
-			console.warn(
+			new Notice(
 				`Could not retrieve template content from "${templatePath}":`,
 				error,
 			);
@@ -292,7 +290,7 @@ export class PeriodicNotesUtil {
 
 					return `## ${file.basename}\n${content}\n\n`;
 				} catch (error) {
-					console.error(`Error reading file ${file.path}:`, error);
+					new Notice(`Error reading file ${file.path}:`, error);
 					return `## ${file.basename}\n*Error reading file content*\n\n`;
 				}
 			}),

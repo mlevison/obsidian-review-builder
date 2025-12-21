@@ -3,22 +3,19 @@
 Review Builder simplifies quarterly and weekly reviews by consolidating your Daily and Weekly notes into single files for easier reflection and analysis.
 
 ## Overview
-
 This plugin was created to streamline the review process. Instead of manually flipping through 13 weekly notes during a quarterly review, Review Builder generates two consolidated files: `quarterly_days.md` and `quarterly_weeks.md`. These combined files make it easier to:
 
 - Get a complete overview of your notes in one place
 - Identify patterns and important items you might have missed
-- Work with AI tools by providing consolidated context in fewer files
 
-## Features
+*Core Philosphy* - this plugin has been built with one key rule. It may only modify	files it created in a temp directory.
+*Disclosure* - most of the code in this plugin was created with generative AI using Claude Code using the skills from: https://github.com/PaulDuvall/claude-code/tree/main
 
 ### Commands
-
 - **Build Quarterly Review**: Select a quarter, and the plugin compiles all Daily and Weekly notes from that period into separate consolidated files
 - **Build Weekly Review**: Select a week, and the plugin compiles all Daily notes from that week (with the previous week's review file included at the top)
 
 ### Settings
-
 Configure the plugin behavior in Settings → Review Builder:
 
 - **Temp Folder**: Choose where temporary review files are saved

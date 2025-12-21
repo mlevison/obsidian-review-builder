@@ -24,10 +24,6 @@ export class QuarterlyReviewSettingTab extends PluginSettingTab {
 
 		containerEl.empty();
 
-		containerEl.createEl("h2", {
-			text: "Quarterly Review Builder Settings",
-		});
-
 		new Setting(containerEl)
 			.setName("Temp Folder Path")
 			.setDesc(
@@ -67,11 +63,8 @@ export class QuarterlyReviewSettingTab extends PluginSettingTab {
 					}),
 			);
 
-		// #{#tlf1a-6}: Configuration for template line filtering
-		containerEl.createEl("h3", { text: "Template Line Filtering" });
-
 		new Setting(containerEl)
-			.setName("Filter Template Lines")
+			.setName("Template Line Filtering")
 			.setDesc(
 				"Remove unchanged template lines from daily and weekly notes when compiling reviews. This helps highlight actual content you've written.",
 			)
