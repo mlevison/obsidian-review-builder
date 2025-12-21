@@ -3,7 +3,7 @@
 	"name": "Review Builder",
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "Simplify quarterly and weekly reviews by combing many Daily and Weekly notes.",
+	"description": "Simplify quarterly and weekly reviews by combing many Daily and Weekly notes",
 	"author": "Mark Levison",
 	"authorUrl": "http://github.com/mlevison",
 	"isDesktopOnly": false
