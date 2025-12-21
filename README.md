@@ -1,75 +1,99 @@
-# Quarterly/Weekly Review Builder
-An Obsidian plugin that speeds up quarterly (and weekly) reviews, by consolidating Daily and Weekly notes into a single file.
+# Review Builder
 
-This plugin, was born out of a quarterly review, where I was frustrated with the process of flipping through 13 weekly notes, wondered if I was missing something important.
+Review Builder simplifies quarterly and weekly reviews by consolidating your Daily and Weekly notes into single files for easier reflection and analysis.
 
-Now each quarter, I have two files to look at: quarterly_days.md and quarterly_weeks.md. In a world of GenAI, having only two files makes it easier to do a final check at each step the review process. Using your AI tool of choice (Obsidian Copilot in my case), I point the tool at my review file file and the `quarterly_days.md` and `quarterly_weeks.md` files. I ask questions like "looking at my review file so far, is there anything I missed?"
+## Overview
 
-## Commands
-- **Build Quarterly Review** - asks which quarter to compile notes for, then finds all the Daily and Weekly notes from the Quarter.
-- **Build Weekly Review** - asks which week to compile notes for, then finds all the Daily notes from the Week. It also adds the previous week's review file at the top of the file.
+This plugin was created to streamline the review process. Instead of manually flipping through 13 weekly notes during a quarterly review, Review Builder generates two consolidated files: `quarterly_days.md` and `quarterly_weeks.md`. These combined files make it easier to:
 
-## Settings
-- **Temp Folder**: Select which folder to use for temporary files.
-- **Empty Section Handling**: Choose whether to remove or keep empty sections (headings with no content) from weekly and quarterly review notes. Options:
-  - **Remove empty sections** (default): Automatically removes headings with no content, cleaning up daily notes that often have blank section templates like "### Work Tasks" or "### Notes" that were never filled in.
-  - **Keep empty sections**: Preserves all headings, even if they have no content.
+- Get a complete overview of your notes in one place
+- Identify patterns and important items you might have missed
+- Work with AI tools by providing consolidated context in fewer files
+
+## Features
+
+### Commands
+
+- **Build Quarterly Review**: Select a quarter, and the plugin compiles all Daily and Weekly notes from that period into separate consolidated files
+- **Build Weekly Review**: Select a week, and the plugin compiles all Daily notes from that week (with the previous week's review file included at the top)
+
+### Settings
+
+Configure the plugin behavior in Settings → Review Builder:
+
+- **Temp Folder**: Choose where temporary review files are saved
+- **Empty Section Handling**: Control whether empty sections are removed or kept
+  - **Remove empty sections** (default): Automatically removes headings with no content, cleaning up templates that were never filled in
+- **Filter Template Lines**: Option to remove lines that exist in the template and are unmodified in the output.
 
 ## Installation
 
-### Manual Installation (for development/testing)
-1. Clone or download this repository
-2. Copy the `main.js`, `manifest.json`, and `styles.css` (if present) files to your vault's plugins directory:
-   ```
-   <VaultFolder>/.obsidian/plugins/quarterly-review-builder/
-   ```
+### From Obsidian Community Plugins
+
+1. Open Settings in Obsidian
+2. Navigate to Community plugins and disable Safe mode
+3. Click Browse and search for "Review Builder"
+4. Click Install, then Enable
+
+### Manual Installation
+
+1. Download the latest release from the [GitHub releases page](https://github.com/mlevison/obsidian-review-builder/releases)
+2. Extract the files to your vault's plugins folder: `<VaultFolder>/.obsidian/plugins/review-builder/`
 3. Reload Obsidian
-4. Enable the plugin in **Settings → Community plugins**
+4. Enable the plugin in Settings → Community plugins
 
-### From Community Plugins (when available)
+## Usage
 
-1. Open **Settings → Community plugins**
-2. Disable **Safe mode**
-3. Click **Browse** and search for "Quarterly Review Builder"
-4. Click **Install** and then **Enable**
+### Building a Quarterly Review
+
+1. Open the command palette (Cmd/Ctrl + P)
+2. Search for "Build Quarterly Review"
+3. Select the quarter you want to review
+4. The plugin creates consolidated files in your configured temp folder
+
+### Building a Weekly Review
+
+1. Open the command palette (Cmd/Ctrl + P)
+2. Search for "Build Weekly Review"
+3. Select the week you want to review
+4. The plugin creates a consolidated file with the previous week's review included
 
 ## Development
 
-This plugin is built using:
-
-- **TypeScript** for type safety
-- **esbuild** for fast bundling
-- **Obsidian API** for plugin functionality
+This plugin uses TypeScript and the Obsidian API.
 
 ### Building from Source
 
 ```bash
-# Install dependencies
 npm install
-
-# Development build (with watch mode)
-npm run dev
-
-# Production build
-npm run build
+npm run dev    # Development build with watch mode
+npm run build  # Production build
+npm run test   # Run tests
 ```
 
 ### Project Structure
 
 ```
 src/
-├── main.ts              # Plugin entry point and lifecycle
+├── main.ts              # Plugin entry point
 ├── settings.ts          # Settings interface and defaults
 ├── commands/
 │   ├── index.ts         # Command registration
-│   └── quarterly-review.ts # Quarterly review implementation
+│   ├── quarterly-review.ts
+│   └── weekly-review.ts
 ├── utils/
-│   └── periodic-notes-integration.ts # Periodic Notes plugin integration
+│   ├── periodic-notes-util.ts
+│   ├── quarter-utils.ts
+│   ├── week-utils.ts
+│   ├── markdown-utils.ts
+│   └── template-filter.ts
 └── ui/
-    └── settings-tab.ts  # Settings UI component
+    └── settings-tab.ts  # Settings UI
 ```
 
 ## Contributing
+
+Contributions are welcome! Please:
 
 1. Fork the repository
 2. Create a feature branch
@@ -79,12 +103,8 @@ src/
 
 ## License
 
-[MIT License](LICENSE)
+This plugin is licensed under the MIT License. See [LICENSE](LICENSE) for details.
 
 ## Support
 
-If you encounter any issues or have feature requests, please create an issue on the GitHub repository.
-
----
-
-*Built with ❤️ for the Obsidian community*
+If you encounter issues or have feature requests, please [create an issue on GitHub](https://github.com/mlevison/obsidian-review-builder/issues).
