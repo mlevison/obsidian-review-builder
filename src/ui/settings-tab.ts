@@ -3,6 +3,7 @@ import {
 	QuarterlyReviewSettings,
 	DEFAULT_SETTINGS,
 	EmptySectionBehavior,
+	TemplateFilterBehavior,
 } from "../settings";
 
 export interface SettingsPlugin extends Plugin {
@@ -74,11 +75,22 @@ export class QuarterlyReviewSettingTab extends PluginSettingTab {
 			.setDesc(
 				"Remove unchanged template lines from daily notes when compiling reviews. This helps highlight actual content you've written.",
 			)
-			.addToggle((toggle) =>
-				toggle
+			.addDropdown((dropdown) =>
+				dropdown
+					.addOption(
+						TemplateFilterBehavior.FILTER_TEMPLATE_LINES,
+						"Filter template lines",
+					)
+					.addOption(
+						TemplateFilterBehavior.DONOT_FILTER_TEMPLATE_LINES,
+						"Keep template lines",
+					)
 					.setValue(this.plugin.settings.filterDailyTemplateLines)
 					.onChange(async (value) => {
-						this.plugin.settings.filterDailyTemplateLines = value;
+						this.plugin.settings.filterDailyTemplateLines =
+							value as
+								| typeof TemplateFilterBehavior.FILTER_TEMPLATE_LINES
+								| typeof TemplateFilterBehavior.DONOT_FILTER_TEMPLATE_LINES;
 						await this.plugin.saveSettings();
 					}),
 			);
@@ -88,11 +100,22 @@ export class QuarterlyReviewSettingTab extends PluginSettingTab {
 			.setDesc(
 				"Remove unchanged template lines from weekly notes when compiling reviews. This helps highlight actual content you've written.",
 			)
-			.addToggle((toggle) =>
-				toggle
+			.addDropdown((dropdown) =>
+				dropdown
+					.addOption(
+						TemplateFilterBehavior.FILTER_TEMPLATE_LINES,
+						"Filter template lines",
+					)
+					.addOption(
+						TemplateFilterBehavior.DONOT_FILTER_TEMPLATE_LINES,
+						"Keep template lines",
+					)
 					.setValue(this.plugin.settings.filterWeeklyTemplateLines)
 					.onChange(async (value) => {
-						this.plugin.settings.filterWeeklyTemplateLines = value;
+						this.plugin.settings.filterWeeklyTemplateLines =
+							value as
+								| typeof TemplateFilterBehavior.FILTER_TEMPLATE_LINES
+								| typeof TemplateFilterBehavior.DONOT_FILTER_TEMPLATE_LINES;
 						await this.plugin.saveSettings();
 					}),
 			);

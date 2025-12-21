@@ -1,5 +1,5 @@
 import { Notice, Plugin, SuggestModal, TFile } from "obsidian";
-import { QuarterlyReviewSettings } from "../settings";
+import { QuarterlyReviewSettings, TemplateFilterBehavior } from "../settings";
 import {
 	PeriodicNotesUtil,
 	NotesInfo,
@@ -152,7 +152,11 @@ async function writeWeeklyReviewTempFile(
 	// #{#tlf1a-1}: Retrieve template content for daily notes
 	const dailySettings = getDailyNoteSettings();
 	let dailyTemplateLines: string[] = [];
-	if (plugin.settings.filterDailyTemplateLines && dailySettings?.template) {
+	if (
+		plugin.settings.filterDailyTemplateLines ===
+			TemplateFilterBehavior.FILTER_TEMPLATE_LINES &&
+		dailySettings?.template
+	) {
 		try {
 			const [templateContent] = await getTemplateInfo(
 				dailySettings.template,

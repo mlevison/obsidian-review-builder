@@ -10,7 +10,12 @@ import {
 } from "obsidian-daily-notes-interface";
 import { removeEmptySections } from "./markdown-utils";
 import { filterTemplateLines } from "./template-filter";
-import { EmptySectionBehavior, EmptySectionBehaviorType } from "../settings";
+import {
+	EmptySectionBehavior,
+	EmptySectionBehaviorType,
+	TemplateFilterBehavior,
+	TemplateFilterBehaviorType,
+} from "../settings";
 
 export interface NotesInfo {
 	dailyNotes: TFile[];
@@ -301,22 +306,26 @@ export class PeriodicNotesUtil {
 		dailyNotes: TFile[],
 		weeklyNotes: TFile[],
 		shouldRemoveEmptySections: EmptySectionBehaviorType = EmptySectionBehavior.DONOT_REMOVE_EMPTY_SECTIONS,
-		filterDailyTemplateLines: boolean = true,
-		filterWeeklyTemplateLines: boolean = true,
+		filterDailyTemplateLines: TemplateFilterBehaviorType = TemplateFilterBehavior.FILTER_TEMPLATE_LINES,
+		filterWeeklyTemplateLines: TemplateFilterBehaviorType = TemplateFilterBehavior.FILTER_TEMPLATE_LINES,
 	): Promise<string> {
 		let summary = "";
 
 		// #{#tlf1a-1}: Retrieve template content for daily notes
 		const dailySettings = getDailyNoteSettings();
-		const dailyTemplateLines = filterDailyTemplateLines
-			? await this.getTemplateLinesArray(dailySettings?.template)
-			: [];
+		const dailyTemplateLines =
+			filterDailyTemplateLines ===
+			TemplateFilterBehavior.FILTER_TEMPLATE_LINES
+				? await this.getTemplateLinesArray(dailySettings?.template)
+				: [];
 
 		// #{#tlf1a-1}: Retrieve template content for weekly notes
 		const weeklySettings = getWeeklyNoteSettings();
-		const weeklyTemplateLines = filterWeeklyTemplateLines
-			? await this.getTemplateLinesArray(weeklySettings?.template)
-			: [];
+		const weeklyTemplateLines =
+			filterWeeklyTemplateLines ===
+			TemplateFilterBehavior.FILTER_TEMPLATE_LINES
+				? await this.getTemplateLinesArray(weeklySettings?.template)
+				: [];
 
 		if (dailyNotes.length > 0) {
 			summary += "# Daily Notes Summary\n\n";
@@ -355,8 +364,8 @@ export class PeriodicNotesUtil {
 		tempFolderPath: string,
 		quarterInfo?: { label: string; quarter: number; year: number },
 		shouldRemoveEmptySections: EmptySectionBehaviorType = EmptySectionBehavior.DONOT_REMOVE_EMPTY_SECTIONS,
-		filterDailyTemplateLines: boolean = true,
-		filterWeeklyTemplateLines: boolean = true,
+		filterDailyTemplateLines: TemplateFilterBehaviorType = TemplateFilterBehavior.FILTER_TEMPLATE_LINES,
+		filterWeeklyTemplateLines: TemplateFilterBehaviorType = TemplateFilterBehavior.FILTER_TEMPLATE_LINES,
 	): Promise<{
 		dailyFilePath: string | null;
 		weeklyFilePath: string | null;
@@ -366,15 +375,19 @@ export class PeriodicNotesUtil {
 
 		// #{#tlf1a-1}: Retrieve template content for daily notes
 		const dailySettings = getDailyNoteSettings();
-		const dailyTemplateLines = filterDailyTemplateLines
-			? await this.getTemplateLinesArray(dailySettings?.template)
-			: [];
+		const dailyTemplateLines =
+			filterDailyTemplateLines ===
+			TemplateFilterBehavior.FILTER_TEMPLATE_LINES
+				? await this.getTemplateLinesArray(dailySettings?.template)
+				: [];
 
 		// #{#tlf1a-1}: Retrieve template content for weekly notes
 		const weeklySettings = getWeeklyNoteSettings();
-		const weeklyTemplateLines = filterWeeklyTemplateLines
-			? await this.getTemplateLinesArray(weeklySettings?.template)
-			: [];
+		const weeklyTemplateLines =
+			filterWeeklyTemplateLines ===
+			TemplateFilterBehavior.FILTER_TEMPLATE_LINES
+				? await this.getTemplateLinesArray(weeklySettings?.template)
+				: [];
 
 		// Ensure temp folder exists
 		const tempFolder = this.app.vault.getAbstractFileByPath(tempFolderPath);

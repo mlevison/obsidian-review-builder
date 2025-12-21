@@ -33,7 +33,8 @@ What are my priorities today?
 - Finish the quarterly report
 - Meet with team`;
 
-			expect(filterTemplateLines(content, templateLines)).toBe(expected);
+			const final = filterTemplateLines(content, templateLines);
+			expect(final.split("\n")).toEqual(expected.split("\n"));
 		});
 
 		it("should preserve lines that differ from template", () => {
@@ -47,7 +48,8 @@ What are my priorities today?
 - Complete project documentation
 - Review pull requests`;
 
-			expect(filterTemplateLines(content, templateLines)).toBe(expected);
+			const final = filterTemplateLines(content, templateLines);
+			expect(final.split("\n")).toEqual(expected.split("\n"));
 		});
 
 		it("should be case-sensitive when matching", () => {
@@ -61,7 +63,8 @@ What Are My Goals?`;
 what are my goals?
 What Are My Goals?`;
 
-			expect(filterTemplateLines(content, templateLines)).toBe(expected);
+			const final = filterTemplateLines(content, templateLines);
+			expect(final.split("\n")).toEqual(expected.split("\n"));
 		});
 
 		it("should be whitespace-sensitive when matching", () => {
@@ -84,7 +87,8 @@ ${line4}`;
 ${line3}
 ${line4}`;
 
-			expect(filterTemplateLines(content, templateLines)).toBe(expected);
+			const final = filterTemplateLines(content, templateLines);
+			expect(final.split("\n")).toEqual(expected.split("\n"));
 		});
 
 		it("shouldn't filter empty lines that match template", () => {
@@ -102,7 +106,8 @@ Content here
 ## Section 2
 More content`;
 
-			expect(filterTemplateLines(content, templateLines)).toBe(expected);
+			const final = filterTemplateLines(content, templateLines);
+			expect(final.split("\n")).toEqual(expected.split("\n"));
 		});
 	});
 
@@ -135,7 +140,8 @@ Relaxed`;
 ## Evening
 Relaxed`;
 
-			expect(filterTemplateLines(content, templateLines)).toBe(expected);
+			const final = filterTemplateLines(content, templateLines);
+			expect(final.split("\n")).toEqual(expected.split("\n"));
 		});
 
 		it("should preserve all heading levels (h1-h6)", () => {
@@ -158,7 +164,8 @@ Content`;
 			];
 
 			// All headings should be preserved
-			expect(filterTemplateLines(content, templateLines)).toBe(content);
+			const final = filterTemplateLines(content, templateLines);
+			expect(final.split("\n")).toEqual(content.split("\n"));
 		});
 
 		it("should preserve headings with special characters", () => {
@@ -170,7 +177,8 @@ More content`;
 
 			const templateLines = ["## Goals & Objectives", "## Q&A Section"];
 
-			expect(filterTemplateLines(content, templateLines)).toBe(content);
+			const final = filterTemplateLines(content, templateLines);
+			expect(final.split("\n")).toEqual(content.split("\n"));
 		});
 	});
 
@@ -181,21 +189,24 @@ Some content here`;
 
 			const templateLines: string[] = [];
 
-			expect(filterTemplateLines(content, templateLines)).toBe(content);
+			const final = filterTemplateLines(content, templateLines);
+			expect(final.split("\n")).toEqual(content.split("\n"));
 		});
 
 		it("should handle undefined template lines", () => {
 			const content = `## Section
 Content`;
 
-			expect(filterTemplateLines(content, undefined)).toBe(content);
+			const final = filterTemplateLines(content, undefined);
+			expect(final.split("\n")).toEqual(content.split("\n"));
 		});
 
 		it("should handle null template lines", () => {
 			const content = `## Section
 Content`;
 
-			expect(filterTemplateLines(content, null)).toBe(content);
+			const final = filterTemplateLines(content, null);
+			expect(final.split("\n")).toEqual(content.split("\n"));
 		});
 	});
 
@@ -248,7 +259,8 @@ My supportive team
 
 ### Notes`;
 
-			expect(filterTemplateLines(content, templateLines)).toBe(expected);
+			const final = filterTemplateLines(content, templateLines);
+			expect(final.split("\n")).toEqual(expected.split("\n"));
 		});
 
 		it("should handle markdown formatting in content", () => {
@@ -276,7 +288,8 @@ const x = 1;
 const x = 1;
 \`\`\``;
 
-			expect(filterTemplateLines(content, templateLines)).toBe(expected);
+			const final = filterTemplateLines(content, templateLines);
+			expect(final.split("\n")).toEqual(expected.split("\n"));
 		});
 
 		it("should preserve lines with partial template matches", () => {
@@ -289,7 +302,8 @@ What are my goals?`;
 			const expected = `## Goals
 What are my goals for this week?`;
 
-			expect(filterTemplateLines(content, templateLines)).toBe(expected);
+			const final = filterTemplateLines(content, templateLines);
+			expect(final.split("\n")).toEqual(expected.split("\n"));
 		});
 	});
 
@@ -322,9 +336,8 @@ Relax`;
 ## Evening Tasks
 Relax`;
 
-			expect(filterTemplateLines(afterEmptyRemoval, templateLines)).toBe(
-				expected,
-			);
+			const final = filterTemplateLines(afterEmptyRemoval, templateLines);
+			expect(final.split("\n")).toEqual(expected.split("\n"));
 		});
 
 		it("should handle complex pipeline: empty removal then template filter", () => {
@@ -371,7 +384,8 @@ None today`;
 			const content = "";
 			const templateLines = ["## Section"];
 
-			expect(filterTemplateLines(content, templateLines)).toBe("");
+			const final = filterTemplateLines(content, templateLines);
+			expect(final.split("\n")).toEqual(content.split("\n"));
 		});
 
 		it("should handle content with no headings", () => {
@@ -384,7 +398,8 @@ No headings`;
 			const expected = `More text
 No headings`;
 
-			expect(filterTemplateLines(content, templateLines)).toBe(expected);
+			const final = filterTemplateLines(content, templateLines);
+			expect(final.split("\n")).toEqual(expected.split("\n"));
 		});
 
 		it("should handle template with lines not in content", () => {
@@ -400,7 +415,8 @@ User content`;
 			const expected = `## Section
 User content`;
 
-			expect(filterTemplateLines(content, templateLines)).toBe(expected);
+			const final = filterTemplateLines(content, templateLines);
+			expect(final.split("\n")).toEqual(expected.split("\n"));
 		});
 
 		it("should handle multiple consecutive template matches", () => {
@@ -419,7 +435,8 @@ Template line 4`;
 
 			const expected = `User content`;
 
-			expect(filterTemplateLines(content, templateLines)).toBe(expected);
+			const final = filterTemplateLines(content, templateLines);
+			expect(final.split("\n")).toEqual(expected.split("\n"));
 		});
 
 		it("should preserve trailing newlines in content", () => {
@@ -434,7 +451,8 @@ Content
 
 `;
 
-			expect(filterTemplateLines(content, templateLines)).toBe(expected);
+			const final = filterTemplateLines(content, templateLines);
+			expect(final.split("\n")).toEqual(expected.split("\n"));
 		});
 	});
 });

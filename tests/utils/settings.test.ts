@@ -1,6 +1,8 @@
 import {
 	EmptySectionBehavior,
 	EmptySectionBehaviorType,
+	TemplateFilterBehavior,
+	TemplateFilterBehaviorType,
 	DEFAULT_SETTINGS,
 	QuarterlyReviewSettings,
 } from "../../src/settings";
@@ -72,6 +74,57 @@ describe("Settings", () => {
 		});
 	});
 
+	describe("TemplateFilterBehavior", () => {
+		it("should have FILTER_TEMPLATE_LINES constant", () => {
+			expect(TemplateFilterBehavior.FILTER_TEMPLATE_LINES).toBe("filter");
+		});
+
+		it("should have DONOT_FILTER_TEMPLATE_LINES constant", () => {
+			expect(TemplateFilterBehavior.DONOT_FILTER_TEMPLATE_LINES).toBe(
+				"keep",
+			);
+		});
+
+		it("should have exactly two values", () => {
+			const keys = Object.keys(TemplateFilterBehavior);
+			expect(keys).toHaveLength(2);
+			expect(keys).toContain("FILTER_TEMPLATE_LINES");
+			expect(keys).toContain("DONOT_FILTER_TEMPLATE_LINES");
+		});
+
+		it("should have distinct values", () => {
+			expect(TemplateFilterBehavior.FILTER_TEMPLATE_LINES).not.toBe(
+				TemplateFilterBehavior.DONOT_FILTER_TEMPLATE_LINES,
+			);
+		});
+	});
+
+	describe("TemplateFilterBehaviorType", () => {
+		it("should accept FILTER_TEMPLATE_LINES value", () => {
+			const value: TemplateFilterBehaviorType =
+				TemplateFilterBehavior.FILTER_TEMPLATE_LINES;
+			expect(value).toBe("filter");
+		});
+
+		it("should accept DONOT_FILTER_TEMPLATE_LINES value", () => {
+			const value: TemplateFilterBehaviorType =
+				TemplateFilterBehavior.DONOT_FILTER_TEMPLATE_LINES;
+			expect(value).toBe("keep");
+		});
+
+		it("should accept string literal values", () => {
+			const filterValue: TemplateFilterBehaviorType = "filter";
+			const keepValue: TemplateFilterBehaviorType = "keep";
+
+			expect(filterValue).toBe(
+				TemplateFilterBehavior.FILTER_TEMPLATE_LINES,
+			);
+			expect(keepValue).toBe(
+				TemplateFilterBehavior.DONOT_FILTER_TEMPLATE_LINES,
+			);
+		});
+	});
+
 	describe("DEFAULT_SETTINGS", () => {
 		it("should have tempFolderPath default", () => {
 			expect(DEFAULT_SETTINGS.tempFolderPath).toBe("temp");
@@ -84,11 +137,15 @@ describe("Settings", () => {
 		});
 
 		it("should have filterDailyTemplateLines enabled by default", () => {
-			expect(DEFAULT_SETTINGS.filterDailyTemplateLines).toBe(true);
+			expect(DEFAULT_SETTINGS.filterDailyTemplateLines).toBe(
+				TemplateFilterBehavior.FILTER_TEMPLATE_LINES,
+			);
 		});
 
 		it("should have filterWeeklyTemplateLines enabled by default", () => {
-			expect(DEFAULT_SETTINGS.filterWeeklyTemplateLines).toBe(true);
+			expect(DEFAULT_SETTINGS.filterWeeklyTemplateLines).toBe(
+				TemplateFilterBehavior.FILTER_TEMPLATE_LINES,
+			);
 		});
 
 		it("should have valid EmptySectionBehaviorType value", () => {
@@ -106,8 +163,10 @@ describe("Settings", () => {
 			const settings: QuarterlyReviewSettings = {
 				tempFolderPath: "my-temp",
 				removeEmptySections: EmptySectionBehavior.REMOVE_EMPTY_SECTIONS,
-				filterDailyTemplateLines: true,
-				filterWeeklyTemplateLines: true,
+				filterDailyTemplateLines:
+					TemplateFilterBehavior.FILTER_TEMPLATE_LINES,
+				filterWeeklyTemplateLines:
+					TemplateFilterBehavior.FILTER_TEMPLATE_LINES,
 			};
 
 			expect(settings.tempFolderPath).toBe("my-temp");
@@ -119,8 +178,10 @@ describe("Settings", () => {
 				tempFolderPath: "another-temp",
 				removeEmptySections:
 					EmptySectionBehavior.DONOT_REMOVE_EMPTY_SECTIONS,
-				filterDailyTemplateLines: false,
-				filterWeeklyTemplateLines: false,
+				filterDailyTemplateLines:
+					TemplateFilterBehavior.DONOT_FILTER_TEMPLATE_LINES,
+				filterWeeklyTemplateLines:
+					TemplateFilterBehavior.DONOT_FILTER_TEMPLATE_LINES,
 			};
 
 			expect(settings.tempFolderPath).toBe("another-temp");
