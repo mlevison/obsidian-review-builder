@@ -17,13 +17,11 @@ export type TemplateFilterBehaviorType =
 export interface QuarterlyReviewSettings {
 	tempFolderPath: string;
 	removeEmptySections: EmptySectionBehaviorType;
-	filterDailyTemplateLines: TemplateFilterBehaviorType; // #{#tlf1a-6}: Configuration for daily notes
-	filterWeeklyTemplateLines: TemplateFilterBehaviorType; // #{#tlf1a-6}: Configuration for weekly notes
+	filterTemplateLines: TemplateFilterBehaviorType; // #{#tlf1a-6}: Configuration for template filtering
 }
 
 export const DEFAULT_SETTINGS: QuarterlyReviewSettings = {
 	tempFolderPath: "temp",
 	removeEmptySections: EmptySectionBehavior.REMOVE_EMPTY_SECTIONS,
-	filterDailyTemplateLines: TemplateFilterBehavior.FILTER_TEMPLATE_LINES, // #{#tlf1a-6}: Enabled by default
-	filterWeeklyTemplateLines: TemplateFilterBehavior.FILTER_TEMPLATE_LINES, // #{#tlf1a-6}: Enabled by default
+	filterTemplateLines: TemplateFilterBehavior.FILTER_TEMPLATE_LINES, // #{#tlf1a-6}: Enabled by default
 };

@@ -306,24 +306,21 @@ export class PeriodicNotesUtil {
 		dailyNotes: TFile[],
 		weeklyNotes: TFile[],
 		shouldRemoveEmptySections: EmptySectionBehaviorType = EmptySectionBehavior.DONOT_REMOVE_EMPTY_SECTIONS,
-		filterDailyTemplateLines: TemplateFilterBehaviorType = TemplateFilterBehavior.FILTER_TEMPLATE_LINES,
-		filterWeeklyTemplateLines: TemplateFilterBehaviorType = TemplateFilterBehavior.FILTER_TEMPLATE_LINES,
+		filterTemplateLines: TemplateFilterBehaviorType = TemplateFilterBehavior.FILTER_TEMPLATE_LINES,
 	): Promise<string> {
 		let summary = "";
 
 		// #{#tlf1a-1}: Retrieve template content for daily notes
 		const dailySettings = getDailyNoteSettings();
 		const dailyTemplateLines =
-			filterDailyTemplateLines ===
-			TemplateFilterBehavior.FILTER_TEMPLATE_LINES
+			filterTemplateLines === TemplateFilterBehavior.FILTER_TEMPLATE_LINES
 				? await this.getTemplateLinesArray(dailySettings?.template)
 				: [];
 
 		// #{#tlf1a-1}: Retrieve template content for weekly notes
 		const weeklySettings = getWeeklyNoteSettings();
 		const weeklyTemplateLines =
-			filterWeeklyTemplateLines ===
-			TemplateFilterBehavior.FILTER_TEMPLATE_LINES
+			filterTemplateLines === TemplateFilterBehavior.FILTER_TEMPLATE_LINES
 				? await this.getTemplateLinesArray(weeklySettings?.template)
 				: [];
 
@@ -364,8 +361,7 @@ export class PeriodicNotesUtil {
 		tempFolderPath: string,
 		quarterInfo?: { label: string; quarter: number; year: number },
 		shouldRemoveEmptySections: EmptySectionBehaviorType = EmptySectionBehavior.DONOT_REMOVE_EMPTY_SECTIONS,
-		filterDailyTemplateLines: TemplateFilterBehaviorType = TemplateFilterBehavior.FILTER_TEMPLATE_LINES,
-		filterWeeklyTemplateLines: TemplateFilterBehaviorType = TemplateFilterBehavior.FILTER_TEMPLATE_LINES,
+		filterTemplateLines: TemplateFilterBehaviorType = TemplateFilterBehavior.FILTER_TEMPLATE_LINES,
 	): Promise<{
 		dailyFilePath: string | null;
 		weeklyFilePath: string | null;
@@ -376,16 +372,14 @@ export class PeriodicNotesUtil {
 		// #{#tlf1a-1}: Retrieve template content for daily notes
 		const dailySettings = getDailyNoteSettings();
 		const dailyTemplateLines =
-			filterDailyTemplateLines ===
-			TemplateFilterBehavior.FILTER_TEMPLATE_LINES
+			filterTemplateLines === TemplateFilterBehavior.FILTER_TEMPLATE_LINES
 				? await this.getTemplateLinesArray(dailySettings?.template)
 				: [];
 
 		// #{#tlf1a-1}: Retrieve template content for weekly notes
 		const weeklySettings = getWeeklyNoteSettings();
 		const weeklyTemplateLines =
-			filterWeeklyTemplateLines ===
-			TemplateFilterBehavior.FILTER_TEMPLATE_LINES
+			filterTemplateLines === TemplateFilterBehavior.FILTER_TEMPLATE_LINES
 				? await this.getTemplateLinesArray(weeklySettings?.template)
 				: [];
 

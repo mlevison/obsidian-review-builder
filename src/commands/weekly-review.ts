@@ -153,7 +153,7 @@ async function writeWeeklyReviewTempFile(
 	const dailySettings = getDailyNoteSettings();
 	let dailyTemplateLines: string[] = [];
 	if (
-		plugin.settings.filterDailyTemplateLines ===
+		plugin.settings.filterTemplateLines ===
 			TemplateFilterBehavior.FILTER_TEMPLATE_LINES &&
 		dailySettings?.template
 	) {

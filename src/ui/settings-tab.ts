@@ -71,9 +71,9 @@ export class QuarterlyReviewSettingTab extends PluginSettingTab {
 		containerEl.createEl("h3", { text: "Template Line Filtering" });
 
 		new Setting(containerEl)
-			.setName("Filter Daily Note Template Lines")
+			.setName("Filter Template Lines")
 			.setDesc(
-				"Remove unchanged template lines from daily notes when compiling reviews. This helps highlight actual content you've written.",
+				"Remove unchanged template lines from daily and weekly notes when compiling reviews. This helps highlight actual content you've written.",
 			)
 			.addDropdown((dropdown) =>
 				dropdown
@@ -85,37 +85,11 @@ export class QuarterlyReviewSettingTab extends PluginSettingTab {
 						TemplateFilterBehavior.DONOT_FILTER_TEMPLATE_LINES,
 						"Keep template lines",
 					)
-					.setValue(this.plugin.settings.filterDailyTemplateLines)
+					.setValue(this.plugin.settings.filterTemplateLines)
 					.onChange(async (value) => {
-						this.plugin.settings.filterDailyTemplateLines =
-							value as
-								| typeof TemplateFilterBehavior.FILTER_TEMPLATE_LINES
-								| typeof TemplateFilterBehavior.DONOT_FILTER_TEMPLATE_LINES;
-						await this.plugin.saveSettings();
-					}),
-			);
-
-		new Setting(containerEl)
-			.setName("Filter Weekly Note Template Lines")
-			.setDesc(
-				"Remove unchanged template lines from weekly notes when compiling reviews. This helps highlight actual content you've written.",
-			)
-			.addDropdown((dropdown) =>
-				dropdown
-					.addOption(
-						TemplateFilterBehavior.FILTER_TEMPLATE_LINES,
-						"Filter template lines",
-					)
-					.addOption(
-						TemplateFilterBehavior.DONOT_FILTER_TEMPLATE_LINES,
-						"Keep template lines",
-					)
-					.setValue(this.plugin.settings.filterWeeklyTemplateLines)
-					.onChange(async (value) => {
-						this.plugin.settings.filterWeeklyTemplateLines =
-							value as
-								| typeof TemplateFilterBehavior.FILTER_TEMPLATE_LINES
-								| typeof TemplateFilterBehavior.DONOT_FILTER_TEMPLATE_LINES;
+						this.plugin.settings.filterTemplateLines = value as
+							| typeof TemplateFilterBehavior.FILTER_TEMPLATE_LINES
+							| typeof TemplateFilterBehavior.DONOT_FILTER_TEMPLATE_LINES;
 						await this.plugin.saveSettings();
 					}),
 			);
