@@ -6,6 +6,7 @@ import {
 	getWeeklyNote,
 	getDailyNoteSettings,
 	getWeeklyNoteSettings,
+	getTemplateInfo,
 } from "obsidian-daily-notes-interface";
 import { removeEmptySections } from "./markdown-utils";
 import { filterTemplateLines } from "./template-filter";
@@ -34,7 +35,7 @@ export class PeriodicNotesUtil {
 
 	// Type declaration for window.moment
 	private get moment() {
-		return (window as any).moment;
+		return window.moment;
 	}
 
 	/**
@@ -230,13 +231,43 @@ export class PeriodicNotesUtil {
 	}
 
 	/**
+	 * Retrieve template lines from a template file
+	 * #{#tlf1a-1}: Template content retrieval
+	 * #{#tlf1a-5}: Template availability handling
+	 *
+	 * @param templatePath - Path to the template file (or null/undefined)
+	 * @returns Array of template lines, or empty array if template unavailable
+	 */
+	private async getTemplateLinesArray(
+		templatePath: string | null | undefined,
+	): Promise<string[]> {
+		if (!templatePath) {
+			return [];
+		}
+
+		try {
+			const [templateContent] = await getTemplateInfo(templatePath);
+			if (!templateContent) {
+				return [];
+			}
+			return templateContent.split("\n");
+		} catch (error) {
+			console.warn(
+				`Could not retrieve template content from "${templatePath}":`,
+				error,
+			);
+			return [];
+		}
+	}
+
+	/**
 	 * Get summary of notes for display
 	 * #{#tlf1a-3}: Processing order - template filtering after removeEmptySections
 	 */
 	getNotesContent(
 		notes: TFile[],
 		shouldRemoveEmptySections: EmptySectionBehaviorType = EmptySectionBehavior.DONOT_REMOVE_EMPTY_SECTIONS,
-		templateLines?: string[] | null,
+		templateLines: string[],
 	): Promise<string[]> {
 		return Promise.all(
 			notes.map(async (file) => {
@@ -251,10 +282,8 @@ export class PeriodicNotesUtil {
 						content = removeEmptySections(content);
 					}
 
-					// #{#tlf1a-3}: Step 2 - Filter template lines if provided
-					if (templateLines && templateLines.length > 0) {
-						content = filterTemplateLines(content, templateLines);
-					}
+					// #{#tlf1a-3}: Step 2 - Filter template lines (filterTemplateLines handles empty arrays)
+					content = filterTemplateLines(content, templateLines);
 
 					return `## ${file.basename}\n${content}\n\n`;
 				} catch (error) {
@@ -272,14 +301,29 @@ export class PeriodicNotesUtil {
 		dailyNotes: TFile[],
 		weeklyNotes: TFile[],
 		shouldRemoveEmptySections: EmptySectionBehaviorType = EmptySectionBehavior.DONOT_REMOVE_EMPTY_SECTIONS,
+		filterDailyTemplateLines: boolean = true,
+		filterWeeklyTemplateLines: boolean = true,
 	): Promise<string> {
 		let summary = "";
+
+		// #{#tlf1a-1}: Retrieve template content for daily notes
+		const dailySettings = getDailyNoteSettings();
+		const dailyTemplateLines = filterDailyTemplateLines
+			? await this.getTemplateLinesArray(dailySettings?.template)
+			: [];
+
+		// #{#tlf1a-1}: Retrieve template content for weekly notes
+		const weeklySettings = getWeeklyNoteSettings();
+		const weeklyTemplateLines = filterWeeklyTemplateLines
+			? await this.getTemplateLinesArray(weeklySettings?.template)
+			: [];
 
 		if (dailyNotes.length > 0) {
 			summary += "# Daily Notes Summary\n\n";
 			const dailyContent = await this.getNotesContent(
 				dailyNotes,
 				shouldRemoveEmptySections,
+				dailyTemplateLines,
 			);
 			summary += dailyContent.join("");
 		}
@@ -289,6 +333,7 @@ export class PeriodicNotesUtil {
 			const weeklyContent = await this.getNotesContent(
 				weeklyNotes,
 				shouldRemoveEmptySections,
+				weeklyTemplateLines,
 			);
 			summary += weeklyContent.join("");
 		}
@@ -310,12 +355,26 @@ export class PeriodicNotesUtil {
 		tempFolderPath: string,
 		quarterInfo?: { label: string; quarter: number; year: number },
 		shouldRemoveEmptySections: EmptySectionBehaviorType = EmptySectionBehavior.DONOT_REMOVE_EMPTY_SECTIONS,
+		filterDailyTemplateLines: boolean = true,
+		filterWeeklyTemplateLines: boolean = true,
 	): Promise<{
 		dailyFilePath: string | null;
 		weeklyFilePath: string | null;
 	}> {
 		let dailyFilePath: string | null = null;
 		let weeklyFilePath: string | null = null;
+
+		// #{#tlf1a-1}: Retrieve template content for daily notes
+		const dailySettings = getDailyNoteSettings();
+		const dailyTemplateLines = filterDailyTemplateLines
+			? await this.getTemplateLinesArray(dailySettings?.template)
+			: [];
+
+		// #{#tlf1a-1}: Retrieve template content for weekly notes
+		const weeklySettings = getWeeklyNoteSettings();
+		const weeklyTemplateLines = filterWeeklyTemplateLines
+			? await this.getTemplateLinesArray(weeklySettings?.template)
+			: [];
 
 		// Ensure temp folder exists
 		const tempFolder = this.app.vault.getAbstractFileByPath(tempFolderPath);
@@ -328,6 +387,7 @@ export class PeriodicNotesUtil {
 			const dailyContent = await this.getNotesContent(
 				dailyNotes,
 				shouldRemoveEmptySections,
+				dailyTemplateLines,
 			);
 			const quarterLabel = quarterInfo
 				? `_${quarterInfo.label.replace(/\s/g, "_")}`
@@ -352,6 +412,7 @@ export class PeriodicNotesUtil {
 			const weeklyContent = await this.getNotesContent(
 				weeklyNotes,
 				shouldRemoveEmptySections,
+				weeklyTemplateLines,
 			);
 			const quarterLabel = quarterInfo
 				? `_${quarterInfo.label.replace(/\s/g, "_")}`

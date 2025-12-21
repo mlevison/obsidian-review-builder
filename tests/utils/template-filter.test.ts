@@ -87,7 +87,7 @@ ${line4}`;
 			expect(filterTemplateLines(content, templateLines)).toBe(expected);
 		});
 
-		it("should filter empty lines that match template", () => {
+		it("shouldn't filter empty lines that match template", () => {
 			const content = `## Section 1
 Content here
 
@@ -98,6 +98,7 @@ More content`;
 
 			const expected = `## Section 1
 Content here
+
 ## Section 2
 More content`;
 
@@ -127,8 +128,10 @@ Relaxed`;
 
 			const expected = `## Morning Routine
 - Woke up at 7am
+
 ## Work Tasks
 - Completed report
+
 ## Evening
 Relaxed`;
 
@@ -232,13 +235,17 @@ What did I accomplish today?
 			];
 
 			const expected = `## 2024-01-15
+
 ### Morning Reflection
 - Complete quarterly review
 - Team standup at 10am
 - Lunch with Sarah
+
 ### Gratitude
 My supportive team
+
 ### Evening Review
+
 ### Notes`;
 
 			expect(filterTemplateLines(content, templateLines)).toBe(expected);
@@ -262,6 +269,7 @@ const x = 1;
 - [x] Complete report
 - [ ] Review code
 **Important**: Don't forget meeting
+
 ### Notes
 > This is a quote
 \`\`\`typescript
@@ -310,6 +318,7 @@ Relax`;
 			];
 
 			const expected = `## Morning Tasks
+
 ## Evening Tasks
 Relax`;
 
@@ -349,10 +358,11 @@ None today
 			const final = filterTemplateLines(afterEmptyRemoval, templateLines);
 
 			const expected = `### Daily Standup
+
 ### Blockers
 None today`;
 
-			expect(final).toBe(expected);
+			expect(final.split("\n")).toEqual(expected.split("\n"));
 		});
 	});
 

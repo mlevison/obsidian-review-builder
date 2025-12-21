@@ -6,6 +6,10 @@ import {
 	DateRange,
 } from "../utils/periodic-notes-util";
 import { generateWeeks, WeekInfo } from "../utils/week-utils";
+import {
+	getDailyNoteSettings,
+	getTemplateInfo,
+} from "obsidian-daily-notes-interface";
 
 class WeekSelectionModal extends SuggestModal<WeekInfo> {
 	plugin: Plugin & { settings: QuarterlyReviewSettings };
@@ -145,10 +149,30 @@ async function writeWeeklyReviewTempFile(
 	const fileName = `daily_notes_w${weekNumberPadded}.md`;
 	const filePath = `${tempFolderPath}/${fileName}`;
 
+	// #{#tlf1a-1}: Retrieve template content for daily notes
+	const dailySettings = getDailyNoteSettings();
+	let dailyTemplateLines: string[] = [];
+	if (plugin.settings.filterDailyTemplateLines && dailySettings?.template) {
+		try {
+			const [templateContent] = await getTemplateInfo(
+				dailySettings.template,
+			);
+			if (templateContent) {
+				dailyTemplateLines = templateContent.split("\n");
+			}
+		} catch (error) {
+			console.warn(
+				`Could not retrieve template content from "${dailySettings.template}":`,
+				error,
+			);
+		}
+	}
+
 	// Get daily notes content
 	const dailyContent = await periodicNotesUtil.getNotesContent(
 		dailyNotes,
 		plugin.settings.removeEmptySections,
+		dailyTemplateLines,
 	);
 	const fileContent = `# Weekly Review - ${weekInfo.label}\n\n${dailyContent.join("")}`;
 

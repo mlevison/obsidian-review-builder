@@ -32,9 +32,10 @@ This specification defines the behavior for filtering out unchanged template lin
 2. **Line-by-Line Comparison** #{#tlf1a-2 authority=developer}
    - System SHALL compare each line of compiled note content against template lines
    - Comparison SHALL be exact string matching (case-sensitive, whitespace-sensitive)
-   - System SHALL skip lines that match template lines exactly
+   - System SHALL skip lines that match template lines exactly (excluding blank lines)
    - System SHALL include lines that differ from template in any way
-   - Empty lines that exist in template SHALL be filtered out if they appear unchanged
+   - System SHALL preserve all blank lines (empty or whitespace-only lines) in the output
+   - Blank lines SHALL NOT be filtered even if they exist in the template
 
 3. **Processing Order** #{#tlf1a-3 authority=developer}
    - Template line filtering SHALL occur AFTER `removeEmptySections` processing
@@ -125,13 +126,15 @@ What are my priorities today?
 What did I accomplish?
 ```
 
-After template filtering:
+After template filtering (note: blank lines are preserved):
 ```markdown
 ## Morning Reflection
+
 - Finish the quarterly report
 - Meet with team
 
 ## Evening Review
+
 ```
 
 **Scenario 2: Weekly Note with No Template**
@@ -153,6 +156,7 @@ Result: Both heading and content preserved (line differs from template)
 
 ### Version History
 
+- v1.1 (2025-12-21): Updated to preserve blank lines during template filtering
 - v1.0 (2025-12-18): Initial specification created
 
 ---

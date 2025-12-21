@@ -99,6 +99,8 @@ async function createQuarterlyReview(
 			tempFolderPath,
 			selectedQuarter,
 			plugin.settings.removeEmptySections,
+			plugin.settings.filterDailyTemplateLines,
+			plugin.settings.filterWeeklyTemplateLines,
 		);
 
 		// Open the newly created file

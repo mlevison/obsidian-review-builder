@@ -36,12 +36,12 @@ export function filterTemplateLines(
 	// Process content line by line
 	const lines = content.split("\n");
 	const filteredLines: string[] = [];
-
 	for (const line of lines) {
 		// #{#tlf1a-4}: Always preserve headings (lines starting with # followed by space)
 		const isHeading = /^#{1,6}\s+/.test(line);
+		const isBlankLine = /^\s*$/.test(line);
 
-		if (isHeading) {
+		if (isHeading || isBlankLine) {
 			filteredLines.push(line);
 		} else {
 			// #{#tlf1a-2}: Exact string matching (case-sensitive, whitespace-sensitive)
