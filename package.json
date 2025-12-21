@@ -1,6 +1,6 @@
 {
 	"name": "review-builder",
-	"version": "0.1.6",
+	"version": "1.0.1",
 	"description": "Simplify quarterly and weekly reviews by combing many Daily and Weekly notes",
 	"main": "src/main.js",
 	"scripts": {
