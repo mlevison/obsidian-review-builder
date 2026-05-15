@@ -1,6 +1,6 @@
 {
 	"name": "review-builder",
-	"version": "1.0.1",
+	"version": "1.0.4",
 	"description": "Simplify quarterly and weekly reviews by combing many Daily and Weekly notes",
 	"main": "src/main.js",
 	"type": "module",
@@ -18,9 +18,8 @@
 		"@eslint/js": "9.30.1",
 		"@types/jest": "^30.0.0",
 		"@types/node": "^16.11.6",
-		"@typescript-eslint/eslint-plugin": "^8.59.3",
+		"@typescript-eslint/utils": "^8.59.3",
 		"esbuild": "0.25.5",
-		"eslint": "^9.39.4",
 		"eslint-plugin-obsidianmd": "0.1.9",
 		"globals": "14.0.0",
 		"jest": "^30.2.0",
@@ -28,7 +27,7 @@
 		"obsidian": "latest",
 		"ts-jest": "^29.4.4",
 		"tslib": "2.4.0",
-		"typescript": "5.8.3",
+		"typescript": "^5.8.3",
 		"typescript-eslint": "8.35.1"
 	},
 	"dependencies": {
