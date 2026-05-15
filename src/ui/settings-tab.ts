@@ -25,7 +25,7 @@ export class QuarterlyReviewSettingTab extends PluginSettingTab {
 		containerEl.empty();
 
 		new Setting(containerEl)
-			.setName("Temp Folder Path")
+			.setName("Temp folder path")
 			.setDesc(
 				"The folder path where quarterly review files will be created",
 			)
@@ -40,7 +40,7 @@ export class QuarterlyReviewSettingTab extends PluginSettingTab {
 			);
 
 		new Setting(containerEl)
-			.setName("Empty Section Handling")
+			.setName("Empty section handling")
 			.setDesc(
 				"Choose whether to remove empty sections (headings with no content) from weekly and quarterly review notes",
 			)
@@ -64,7 +64,7 @@ export class QuarterlyReviewSettingTab extends PluginSettingTab {
 			);
 
 		new Setting(containerEl)
-			.setName("Template Line Filtering")
+			.setName("Template line filtering")
 			.setDesc(
 				"Remove unchanged template lines from daily and weekly notes when compiling reviews. This helps highlight actual content you've written.",
 			)

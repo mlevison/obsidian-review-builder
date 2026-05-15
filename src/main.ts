@@ -21,11 +21,9 @@ export default class QuarterlyReviewPlugin extends Plugin {
 	}
 
 	async loadSettings() {
-		this.settings = Object.assign(
-			{},
-			DEFAULT_SETTINGS,
-			await this.loadData(),
-		);
+		const loaded =
+			(await this.loadData()) as Partial<QuarterlyReviewSettings> | null;
+		this.settings = { ...DEFAULT_SETTINGS, ...loaded };
 	}
 
 	async saveSettings() {

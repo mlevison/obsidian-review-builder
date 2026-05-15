@@ -9,11 +9,11 @@ import { generateQuarters, QuarterInfo } from "../utils/quarter-utils";
 
 class QuarterSelectionModal extends SuggestModal<QuarterInfo> {
 	plugin: Plugin & { settings: QuarterlyReviewSettings };
-	onChoose: (quarter: QuarterInfo) => void;
+	onChoose: (quarter: QuarterInfo) => void | Promise<void>;
 
 	constructor(
 		plugin: Plugin & { settings: QuarterlyReviewSettings },
-		onChoose: (quarter: QuarterInfo) => void,
+		onChoose: (quarter: QuarterInfo) => void | Promise<void>,
 	) {
 		super(plugin.app);
 		this.plugin = plugin;
@@ -33,7 +33,7 @@ class QuarterSelectionModal extends SuggestModal<QuarterInfo> {
 	}
 
 	onChooseSuggestion(quarter: QuarterInfo, evt: MouseEvent | KeyboardEvent) {
-		this.onChoose(quarter);
+		void this.onChoose(quarter);
 	}
 }
 
@@ -45,7 +45,8 @@ export async function buildQuarterlyReview(
 
 		if (!periodicNotesUtil.arePeriodicNotesConfigured()) {
 			new Notice(
-				"Daily/Weekly notes functionality is not available. Please enable Daily Notes or install Periodic Notes plugin.",
+				// eslint-disable-next-line obsidianmd/ui/sentence-case
+				"Daily and weekly notes functionality is not available. Please enable Daily Notes or install Periodic Notes plugin.",
 			);
 			return;
 		}
@@ -63,7 +64,8 @@ export async function buildQuarterlyReview(
 		);
 		modal.open();
 	} catch (error) {
-		new Notice("Failed to create quarterly review.");
+		const message = error instanceof Error ? error.message : String(error);
+		new Notice(`Failed to create quarterly review: ${message}`);
 	}
 }
 
@@ -77,7 +79,7 @@ async function createQuarterlyReview(
 
 		// Get Daily and Weekly notes information for the selected quarter
 		new Notice(
-			`Scanning for Daily and Weekly notes in ${selectedQuarter.dateRangeLabel}...`,
+			`Scanning for daily and weekly notes in ${selectedQuarter.dateRangeLabel}...`,
 		);
 		const dateRange: DateRange = {
 			startDate: selectedQuarter.startDate,
@@ -130,6 +132,7 @@ async function createQuarterlyReview(
 			);
 		}
 	} catch (error) {
-		new Notice("Failed to create quarterly review.");
+		const message = error instanceof Error ? error.message : String(error);
+		new Notice(`Failed to create quarterly review: ${message}`);
 	}
 }

@@ -1,4 +1,4 @@
-import { App, TFile, Notice } from "obsidian";
+import { App, TFile, Notice, moment } from "obsidian";
 import {
 	getAllDailyNotes,
 	getAllWeeklyNotes,
@@ -38,11 +38,6 @@ export class PeriodicNotesUtil {
 		this.app = app;
 	}
 
-	// Type declaration for window.moment
-	private get moment() {
-		return window.moment;
-	}
-
 	/**
 	 * Check if daily or weekly notes functionality is available
 	 * This now checks if the daily-notes-interface can access the settings
@@ -53,7 +48,7 @@ export class PeriodicNotesUtil {
 			const dailySettings = getDailyNoteSettings();
 			const weeklySettings = getWeeklyNoteSettings();
 			return !!(dailySettings || weeklySettings);
-		} catch (error) {
+		} catch {
 			return false;
 		}
 	}
@@ -109,8 +104,10 @@ export class PeriodicNotesUtil {
 				weeklyFormat,
 			};
 		} catch (error) {
+			const message =
+				error instanceof Error ? error.message : String(error);
 			new Notice(
-				"Error accessing daily/weekly notes. Please check your settings.",
+				`Error accessing daily/weekly notes. Please check your settings: ${message}`,
 			);
 			return {
 				dailyNotes: [],
@@ -140,8 +137,8 @@ export class PeriodicNotesUtil {
 		}
 
 		const filteredNotes: TFile[] = [];
-		const currentDate = this.moment(dateRange.startDate);
-		const endDate = this.moment(dateRange.endDate);
+		const currentDate = moment(dateRange.startDate);
+		const endDate = moment(dateRange.endDate);
 
 		if (notesType === "daily") {
 			// Get all daily notes - returns Record<string, TFile>
@@ -409,7 +406,7 @@ export class PeriodicNotesUtil {
 			const existingDailyFile =
 				this.app.vault.getAbstractFileByPath(dailyFilePath);
 			if (existingDailyFile) {
-				await this.app.vault.delete(existingDailyFile);
+				await this.app.fileManager.trashFile(existingDailyFile);
 			}
 
 			await this.app.vault.create(dailyFilePath, dailyFileContent);
@@ -434,7 +431,7 @@ export class PeriodicNotesUtil {
 			const existingWeeklyFile =
 				this.app.vault.getAbstractFileByPath(weeklyFilePath);
 			if (existingWeeklyFile) {
-				await this.app.vault.delete(existingWeeklyFile);
+				await this.app.fileManager.trashFile(existingWeeklyFile);
 			}
 
 			await this.app.vault.create(weeklyFilePath, weeklyFileContent);

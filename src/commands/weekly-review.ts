@@ -13,11 +13,11 @@ import {
 
 class WeekSelectionModal extends SuggestModal<WeekInfo> {
 	plugin: Plugin & { settings: QuarterlyReviewSettings };
-	onChoose: (week: WeekInfo) => void;
+	onChoose: (week: WeekInfo) => void | Promise<void>;
 
 	constructor(
 		plugin: Plugin & { settings: QuarterlyReviewSettings },
-		onChoose: (week: WeekInfo) => void,
+		onChoose: (week: WeekInfo) => void | Promise<void>,
 	) {
 		super(plugin.app);
 		this.plugin = plugin;
@@ -38,7 +38,7 @@ class WeekSelectionModal extends SuggestModal<WeekInfo> {
 	}
 
 	onChooseSuggestion(week: WeekInfo, evt: MouseEvent | KeyboardEvent) {
-		this.onChoose(week);
+		void this.onChoose(week);
 	}
 }
 
@@ -50,7 +50,8 @@ export async function buildWeeklyReview(
 
 		if (!periodicNotesUtil.arePeriodicNotesConfigured()) {
 			new Notice(
-				"Daily/Weekly notes functionality is not available. Please enable Daily Notes or install Periodic Notes plugin.",
+				// eslint-disable-next-line obsidianmd/ui/sentence-case
+				"Daily weekly notes functionality is not available. Please enable Daily Notes or install Periodic Notes plugin.",
 			);
 			return;
 		}
@@ -68,9 +69,8 @@ export async function buildWeeklyReview(
 		);
 		modal.open();
 	} catch (error) {
-		new Notice(
-			"Failed to create weekly review.",
-		);
+		const message = error instanceof Error ? error.message : String(error);
+		new Notice(`Failed to create weekly review: ${message}`);
 	}
 }
 
@@ -118,9 +118,8 @@ async function createWeeklyReview(
 			new Notice(`No daily notes found for ${selectedWeek.label}.`);
 		}
 	} catch (error) {
-		new Notice(
-			"Failed to create weekly review.",
-		);
+		const message = error instanceof Error ? error.message : String(error);
+		new Notice(`Failed to create weekly review: ${message}`);
 	}
 }
 
@@ -163,8 +162,10 @@ async function writeWeeklyReviewTempFile(
 				dailyTemplateLines = templateContent.split("\n");
 			}
 		} catch (error) {
+			const message =
+				error instanceof Error ? error.message : String(error);
 			new Notice(
-				`Could not retrieve template content from "${dailySettings.template}": ${error}`,
+				`Could not retrieve template content from "${dailySettings.template}": ${message}`,
 			);
 		}
 	}
@@ -180,7 +181,7 @@ async function writeWeeklyReviewTempFile(
 	// Check if file exists and delete it first (since we want to overwrite)
 	const existingFile = app.vault.getAbstractFileByPath(filePath);
 	if (existingFile) {
-		await app.vault.delete(existingFile);
+		await app.fileManager.trashFile(existingFile);
 	}
 
 	// Create the new file
