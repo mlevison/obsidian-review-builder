@@ -293,9 +293,7 @@ export class PeriodicNotesUtil {
 				} catch (error) {
 					const message =
 						error instanceof Error ? error.message : String(error);
-					new Notice(
-						`Error reading file ${file.path}: ${message}`,
-					);
+					new Notice(`Error reading file ${file.path}: ${message}`);
 					return `## ${file.basename}\n*Error reading file content*\n\n`;
 				}
 			}),
