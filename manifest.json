@@ -1,7 +1,7 @@
 {
 	"id": "review-builder",
 	"name": "Review Builder",
-	"version": "1.0.3",
+	"version": "1.0.5",
 	"minAppVersion": "0.15.0",
 	"description": "Simplify quarterly and weekly reviews by combining many Daily and Weekly notes.",
 	"author": "Mark Levison",
