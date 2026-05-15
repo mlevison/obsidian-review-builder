@@ -1,3 +1,4 @@
+import { describe, test, expect } from "@jest/globals";
 import { generateQuarters } from "../../src/utils/quarter-utils";
 
 describe("generateQuarters - Core Requirement Tests", () => {

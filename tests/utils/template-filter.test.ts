@@ -10,6 +10,7 @@
  * - #{#tlf1a-5}: Template availability handling
  */
 
+import { describe, it, expect } from "@jest/globals";
 import { filterTemplateLines } from "../../src/utils/template-filter";
 import { removeEmptySections } from "../../src/utils/markdown-utils";
 
