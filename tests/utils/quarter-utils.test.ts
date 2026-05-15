@@ -23,10 +23,16 @@ describe("generateQuarters - Core Requirement Tests", () => {
 		expect(quartersBefore.length).toBeGreaterThanOrEqual(4);
 
 		// Should be in chronological order
-		for (let i = 1; i < quarters.length; i++) {
-			expect(quarters[i].startDate.getTime()).toBeGreaterThan(
-				quarters[i - 1].startDate.getTime(),
+		const [first, ...rest] = quarters;
+		if (first === undefined) {
+			throw new Error("Expected quarters to contain at least one entry");
+		}
+		let prev = first;
+		for (const q of rest) {
+			expect(q.startDate.getTime()).toBeGreaterThan(
+				prev.startDate.getTime(),
 			);
+			prev = q;
 		}
 	});
 

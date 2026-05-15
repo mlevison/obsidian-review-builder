@@ -4,11 +4,18 @@ export const removeEmptySections = (content: string): string => {
 	}
 
 	const lines = content.split("\n");
+	const lineAt = (idx: number): string => {
+		const line = lines[idx];
+		if (line === undefined) {
+			throw new Error(`Line index ${idx} out of bounds`);
+		}
+		return line;
+	};
 	const result: string[] = [];
 
 	let i = 0;
 	while (i < lines.length) {
-		const line = lines[i];
+		const line = lineAt(i);
 		const headingMatch = line.match(/^(#{1,6})\s+(.*)$/);
 
 		if (headingMatch) {
@@ -19,7 +26,7 @@ export const removeEmptySections = (content: string): string => {
 			// Collect lines until next heading or end
 			let j = i + 1;
 			while (j < lines.length) {
-				const nextLine = lines[j];
+				const nextLine = lineAt(j);
 				const nextHeadingMatch = nextLine.match(/^#{1,6}\s+/);
 
 				if (nextHeadingMatch) {
@@ -53,7 +60,7 @@ export const removeEmptySections = (content: string): string => {
 	}
 
 	// Clean up trailing empty lines
-	while (result.length > 0 && result[result.length - 1].trim() === "") {
+	while (result.at(-1)?.trim() === "") {
 		result.pop();
 	}
 
@@ -69,10 +76,17 @@ export const removeEmptySections = (content: string): string => {
  */
 export const isSectionEmpty = (section: string): boolean => {
 	const lines = section.split("\n");
+	const lineAt = (idx: number): string => {
+		const line = lines[idx];
+		if (line === undefined) {
+			throw new Error(`Line index ${idx} out of bounds`);
+		}
+		return line;
+	};
 
 	// Skip the heading line and check remaining lines
 	for (let i = 1; i < lines.length; i++) {
-		const line = lines[i];
+		const line = lineAt(i);
 
 		// If we hit another heading, the section is empty
 		if (line.match(/^#{1,6}\s+/)) {

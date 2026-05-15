@@ -255,9 +255,10 @@ export class PeriodicNotesUtil {
 			}
 			return templateContent.split("\n");
 		} catch (error) {
+			const message =
+				error instanceof Error ? error.message : String(error);
 			new Notice(
-				`Could not retrieve template content from "${templatePath}":`,
-				error,
+				`Could not retrieve template content from "${templatePath}": ${message}`,
 			);
 			return [];
 		}
@@ -290,7 +291,11 @@ export class PeriodicNotesUtil {
 
 					return `## ${file.basename}\n${content}\n\n`;
 				} catch (error) {
-					new Notice(`Error reading file ${file.path}:`, error);
+					const message =
+						error instanceof Error ? error.message : String(error);
+					new Notice(
+						`Error reading file ${file.path}: ${message}`,
+					);
 					return `## ${file.basename}\n*Error reading file content*\n\n`;
 				}
 			}),

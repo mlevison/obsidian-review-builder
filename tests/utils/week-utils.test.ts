@@ -123,15 +123,20 @@ describe("week-utils", () => {
 
 			expect(weeks).toHaveLength(2);
 
+			const [previousWeek, currentWeek] = weeks;
+			if (previousWeek === undefined || currentWeek === undefined) {
+				throw new Error("Expected weeks to contain two entries");
+			}
+
 			// First item should be previous week (Week 1)
-			expect(weeks[0].weekNumber).toBe(1);
-			expect(weeks[0].year).toBe(2024);
-			expect(weeks[0].label).toBe("Week 1, 2024");
+			expect(previousWeek.weekNumber).toBe(1);
+			expect(previousWeek.year).toBe(2024);
+			expect(previousWeek.label).toBe("Week 1, 2024");
 
 			// Second item should be current week (Week 2)
-			expect(weeks[1].weekNumber).toBe(2);
-			expect(weeks[1].year).toBe(2024);
-			expect(weeks[1].label).toBe("Week 2, 2024");
+			expect(currentWeek.weekNumber).toBe(2);
+			expect(currentWeek.year).toBe(2024);
+			expect(currentWeek.label).toBe("Week 2, 2024");
 		});
 
 		it("should handle year boundary correctly", () => {
@@ -141,8 +146,10 @@ describe("week-utils", () => {
 			expect(weeks).toHaveLength(2);
 
 			// Previous week should be from 2023 or 2024 depending on ISO week calculation
-			const previousWeek = weeks[0];
-			const currentWeek = weeks[1];
+			const [previousWeek, currentWeek] = weeks;
+			if (previousWeek === undefined || currentWeek === undefined) {
+				throw new Error("Expected weeks to contain two entries");
+			}
 
 			expect(currentWeek.weekNumber).toBe(1);
 			expect(currentWeek.year).toBe(2024);
